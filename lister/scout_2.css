@@ -1,0 +1,251 @@
+/* General styles */ 
+body {
+  margin: 0;
+  padding: 0;
+  border: 0; /* This removes the border around the viewport in old versions of IE */
+  width: 100%;
+  background: #fff;
+  min-width:  1024px; 
+  font-size:  12px;
+  font-family: Arial ;
+}
+form {
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: #225E80;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #CC0033;
+  text-decoration: underline;
+}
+
+p {
+  margin: .4em 0 .8em 0;
+  padding: 0;
+}
+
+img {
+  margin: 0;
+}
+
+fieldset {
+  border: 0px solid white;
+  padding: 0;
+  margin: 0;
+}
+.floatLeft {
+  float:left;
+}
+.floatRight {
+  float:right;
+}
+.clearer {
+	line-height: 0; /* ie */
+	clear: both;
+}
+
+
+/* Header styles */
+#header {
+  width: 100%;
+  background-color: #cc3a0a; /*Background color header */
+  background-image: url(http://detektor.emneportal.no/sublima/images/header_topic.png); /*header background image*/
+  height: 120px;
+}
+#headerLogo {
+  float:left;
+}
+#headerLogo a {
+  text-decoration: none;
+}
+.headerImg {
+   margin:24px 0 0 15px;
+   border: none;
+}
+#headerText {
+  display:inline;
+  color: #ffffff;
+  font-weight:normal;
+  margin-left:10px;
+  font-size: 20px;
+}
+#topMenu {
+ float:left;
+ height: 100%;
+ margin-left:25px;
+}
+#headerSpacer {
+  height: 86px;
+  width: 100%;
+}
+.MenuItem {
+  background-color: #339999; /*background color for the menu items */
+  text-align: center;
+  height:30px;
+  float:left;
+  width: 150px;
+  margin-left: 10px;
+  border:2px solid #fff; /*Border color menu items */
+  line-height: 30px;
+  color: #fff; /*text color menu items */
+  font-size: 16px;
+  font-weight:bold;
+}
+.MenuItem a {
+  color:#fff; 
+  text-decoration: none;
+}
+#textSize {
+  float: right;
+  margin-top: 40px;
+  padding: 5px;
+}
+#textSizeLarge {
+  font-size:  16px;
+  font-weight: bold;
+  padding: 5px;
+}
+#textSizeMedium {
+  font-size:  14px;
+  font-weight: bold;
+  padding: 5px;
+}
+#textSizeSmall {
+  font-size:  12px;
+  background-color: #F3E3C4; /*backgund color selectet text size, also change color in textsize.js*/
+  font-weight: bold;
+  padding: 5px;
+}
+.langBar {
+  margin: 15px 15px 0 0;
+  float:right;
+  text-align:right;
+}
+.langBar a {
+  text-decoration: none;
+  color: #000000;
+}
+.langBar a:hover {
+  text-decoration: underline;
+  color: #000000;
+  background: none;
+}
+.langBar a:active {
+  text-decoration: underline;
+  color: #000000;
+  background: none;
+}
+.spacer {
+  height: 40px;
+  width: 100%;
+}
+
+/* tabeller */
+
+table {
+	margin: 0 auto;
+}
+
+td {
+	padding: 10px;
+}
+
+th {
+	padding: 10px;
+	text-align: left;
+	text-decoration: underline;
+}
+
+/* innhold */
+
+#container {
+	width: 1000px;
+	margin: 0 auto;
+	padding: 0;
+}
+
+/* Søkeresultat */
+
+#mashupcontent {
+	width: 1000px;
+	margin: 0 auto;
+	padding: 0;
+	background-color: #F3E3C4;
+	min-height: 500px;
+
+}
+
+#leftCol {
+	float: left;
+	width: 450px;
+	padding: 10px;
+}
+
+#rightCol {
+	float: right;
+	width: 450px;
+	padding: 10px;
+}
+
+.clearfloat {
+	clear: both;
+	height: 0;
+	font-size: 1px;
+}
+
+#browseHeader {
+  background-color:#339999; /* background color browse header */
+  line-height:26px;
+  width:100%;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+#browseHeaderText {
+  margin-left: 15px;
+}
+
+#overFooter {
+	background-color:#FFFFFF; /* background color overFooter*/
+	text-align: center;
+}
+.footerImg {
+   border: none;
+}
+#footer {
+  margin-top: 10px;
+  background-color: #FFFFFF; /* background color footer*/
+  height: 30px;
+}
+#footer a {
+  color: #fff;
+  text-decoration: underline;
+}
+#leftFooter {
+  width: 49%;
+  float:left;
+  color: #ffffff;
+  background-color: #D14D22; /* background color left footer*/
+  text-align:center;
+  height:100%;
+ }
+#rightFooter {
+    float:right;
+    width: 49%;
+	color: #ffffff;
+    background-color: #D14D22; /* background color right footer*/
+    padding: 0 10px;
+    text-align:center;
+    height:100%;
+}
+#underFooter {
+	background-color:#FFFFFF; /* background color under-footer*/
+	text-align: center;
+}
