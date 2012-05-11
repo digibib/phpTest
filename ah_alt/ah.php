@@ -105,13 +105,16 @@ if ($bkList->length > 0) {
 
 // Hent tekstutdrag fra ønskebok
 
-$obQuery = "PREFIX bibo: <http://purl.org/ontology/bibo/>
+$obQuery = "PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX bibo: <http://purl.org/ontology/bibo/>
 PREFIX fabio: <http://purl.org/spar/fabio/>
 PREFIX rev: <http://purl.org/stuff/rev#>
 select ?excerpt where {
 ?work fabio:hasManifestation <$originUri> ;
-rev:hasReview ?rev .
-?rev bibo:Excerpt ?excerpt .}";
+dct:hasPart ?quote .
+?quote a bibo:Quote ;
+rdf:value ?excerpt .}";
 
 $obRoot = localQuery($obQuery);
 $obList = $obRoot["results"]["bindings"];
