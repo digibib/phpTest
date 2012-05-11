@@ -4,8 +4,27 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Aktive hyller</title>
 		<link rel="stylesheet" type="text/css" href="ah.css" />
+		<script>
+        function init() {
+          var Socket = "MozWebSocket" in window ? MozWebSocket : WebSocket;
+          var ws = new Socket("ws://localhost:2000/");
+          ws.onmessage = function(evt) { 
+            //alert("Received tag: " + evt.data); 
+
+            // make sure we do not send initial server handshake!
+            if (evt.data != "hello server" && evt.data != "connected!") {
+              document.ah.id.value = evt.data;
+              document.forms.ah.submit();
+            };
+          };
+          ws.onopen = function() {
+            ws.send("hello server");
+            ws.send("connected!");
+          };
+        };
+        </script>		
 	</head>
-	<body onLoad="document.forms.ah.id.focus()">
+	<body onLoad="init()">
 	
 <?php
 error_reporting(E_ALL);
@@ -25,23 +44,18 @@ if (strlen($id) > 7) {
 
 $originUri = "http://data.deichman.no/resource/tnr_".$tnr;
 
+?>
+<table align='center' width='90%' border='0'>
+<tr border='0'><td border='0'><a href='index.html'><img src='images/header.jpg'/></a></td>
+<td align='right' border='0'><form name='ah' action='ah.php' method='get'>
+<input type='hidden' name='id'/><img src='images/rfid-icon.jpg' width='70' height='70'/><br/>legg ny bok p&aring; leseren 
+</td></tr></form>
 
-// Vis ramme
+<tr><td colspan='2'><table width='100%' border='5'><tr>
 
-echo "<table align='center' width='90%' border='0'>";
-echo "<tr border='0'><td border='0'><a href='index.html'><img src='images/header.jpg'/></a></td>";
-echo "<td align='right' border='0'><form name='ah' action='ah.php' method='get'>";
-echo "<input type='text' size='20' name='id'/>";
-echo "</td></tr>";
-
-echo "<tr><td colspan='2'><table width='100%' border='5'><tr>";
-
-
-// Felt 1
-
-echo "<td colspan='2'>";
-echo "<table border='0'><tr>";
-
+<td colspan='2'>
+<table border='0'><tr>
+<?php
 // Hent tittel, forfatternavn og ISBN lokalt
 
 $originQuery = "PREFIX dct: <http://purl.org/dc/terms/>

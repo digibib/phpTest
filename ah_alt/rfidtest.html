@@ -2,15 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Aktive hyller</title>
+		<title>RFID test</title>
 		<link rel="stylesheet" type="text/css" href="ah.css" />
 		<style type="text/css">
 			body {
 				background-color:White;
-				background-image: url(images/ah_bg.jpg);
 				background-position:center top; 
 				background-repeat:no-repeat;
-				margin:550px 0px 0px 0px; padding:0px;
+				margin:200px 0px 0px 0px; padding:0px;
 				text-align:center;
 			}
 			
@@ -23,40 +22,27 @@
 			}
 		</style>
 		<script>
-
         function init() {
 
           var Socket = "MozWebSocket" in window ? MozWebSocket : WebSocket;
           var ws = new Socket("ws://localhost:2000/");
           ws.onmessage = function(evt) { 
             //alert("Received tag: " + evt.data); 
-            debug(evt.data);
-            // make sure we do not send initial server handshake!
-            if (evt.data != "hello server" && evt.data != "connected!") {
-              document.ah.id.value = evt.data;
-              document.forms.ah.submit();
+            document.getElementById('display').innerHTML = evt.data;
             };
-          };
           ws.onclose = function() { debug("socket closed"); };
 
           ws.onopen = function() {
-			debug("connected...");
             ws.send("hello server");
-            ws.send("connected!");
+            ws.send("hello again");
           };
         };
-        function debug(string) {
-            document.getElementById("debug").innerHTML = string;
-        }
         </script>
 	</head>
 	<body onLoad="init()">
 		<div class="content">
-		<h1>Skann en bok</h1>
-		<form name="ah" action="ah.php" method="get">
-			<input type="hidden" name="id"/>
-		</form>
-		</div>
-		<div id="debug"></div>
+		  <h1>RFID tag test</h1>
+        </div>
+		<div id="display"></div>
 	</body>
 </html>
