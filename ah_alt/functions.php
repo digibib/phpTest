@@ -2,32 +2,40 @@
 
 // Funksjon for generelle spørringer etter xml
 
-function query($handle) {
-	$proxy = "10.172.2.8:3128"; //<-optional proxy IP
+function query($handle, $format) {
+	//$proxy = "10.172.2.8:3128"; //<-optional proxy IP
 	$ch = curl_init(); 
 	curl_setopt($ch, CURLOPT_URL, $handle); 
 	curl_setopt($ch, CURLOPT_HEADER, 0); 
-	if($proxy){
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	/*
+	 if($proxy){
 		curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, 1); 
 		curl_setopt($ch, CURLOPT_PROXY, "$proxy"); 
 	}
-	$result = curl_exec($ch);
-	echo curl_error($ch);
+	*/
+	$response = curl_exec($ch);
+	if($format == "json"){
+	  $result = json_decode($response,true); // true gives back php arrays, if not -> objects
+	} elseif($format == "xml"){
+	  $doc = new DomDocument();
+	  $doc->loadXML($response);
+	  $result = $doc->documentElement;
+	} else {
+      echo "wrong format";
+	  $result = curl_error($ch);
+	}
 	curl_close($ch);
-	$doc = new DomDocument();
-	$doc->loadXML($result);
-	$root = $doc->documentElement;
-	return $root;
+	return $result;
 }
 
 
 // Funksjon for sparql-spørringer til data.deichman.no
 
 function localQuery($query) {
-$handle = "http://data.deichman.no/sparql/?default-graph-uri=&should-sponge=&query=".urlencode($query)."&debug=on&timeout=&format=application%2Frdf%2Bxml&save=display&fname=";
-$root = query($handle);
-return $root ;
+$handle = "http://data.deichman.no/sparql/?query=".urlencode($query)."&format=application%2Fjson";
+$result = query($handle, "json");
+return $result ;
 }
 
 
@@ -76,8 +84,7 @@ function checkBE($url) {
 
 // Funksjon for å lage lister med relaterte titler
 
-function listTitles($predicate, $value, $originTitle) {
-	
+function listTitles($predicate, $value, $originTitle, $listLen = "5") {
 	$query = "PREFIX dct: <http://purl.org/dc/terms/>
 	PREFIX bibo: <http://purl.org/ontology/bibo/>
 	PREFIX format: <http://data.deichman.no/format/>
@@ -94,29 +101,23 @@ function listTitles($predicate, $value, $originTitle) {
 	filter (regex(?image, \"bokkilden\"))
 	filter (?language = <http://lexvo.org/id/iso639-3/nob> || ?language = <http://lexvo.org/id/iso639-3/nno>)}";
 	
-	$root = localQuery($query);
-	$list = $root->getElementsByTagName("solution");
-	$listLen = $list->length;
-	
-	if ($listLen > 0) {
-	
-		for ($f=0; $f<$listLen; $f++) {
-			$place[$f] = $f;
-		}
-	
-		shuffle($place);
+	$rel_json = localQuery($query);
+	$list = $rel_json["results"]["bindings"];
+	$titleList = "";
+	if ($list) {
+		shuffle($list);
 		$end = 0;
 		$count = 0;
 		$listNo = 0;
 		$titleList = "<table border='0'><tr>";
+
+		foreach ($list as $f=>$item) {
+			$place[$f] = $f;
 		
-		while ($end == 0) {
-			$solutions = $list->item($place[$count])->getElementsByTagName("value");
-			$uri = $solutions->item(0)->getAttribute("rdf:resource");
+			$uri = $item["doc"]["value"];
 			$tnr[$listNo] = str_replace("http://data.deichman.no/resource/tnr_", "", $uri);
-			$title[$listNo] = $solutions->item(1)->nodeValue;
-			$image = $solutions->item(2)->getAttribute("rdf:resource")."&width=80";
-			
+			$title[$listNo] = $item["title"]["value"];
+			$image = $item["image"]["value"]."&width=80";
 			
 			// Undersøk om tittelen allerede er tatt med
 			
@@ -132,8 +133,7 @@ function listTitles($predicate, $value, $originTitle) {
 			}
 			$count++;
 			if ($listNo == 5 || $count == $listLen) $end = 1; // Undersøk om lista er komplett
-		}
-		
+	    }
 		$titleList .= "</tr><tr>";
 		
 		for ($n=0; $n<$listNo; $n++) {
