@@ -1,0 +1,22 @@
+####################
+## internal searches
+####################
+
+tnr -> book_id
+
+book_id -> bibliographic (title, responsibility)
+book_id -> cover_urls
+book_id -> isbn(all)
+book_id -> reviews
+
+book_id -> books by same authors
+book_id -> similar books
+
+
+
+####################
+## external searches
+####################
+
+author, title (or isbn) -> bokkilden -> presentation
+isbn -> bokelskere -> rating
