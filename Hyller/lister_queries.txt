@@ -5,7 +5,7 @@ PREFIX dct: <http://purl.org/dc/terms/>
 PREFIX fabio: <http://purl.org/spar/fabio/>
 PREFIX deich: <http://data.deichman.no/>
 
-select distinct ?book ?authorName ?title where {
+select distinct ?book (sql:group_digest(?authorName, ', ', 1000, 1)) as ?authorName ?title (sql:sample(?image)) as ?image where {
  <$originUri> dct:creator ?creator .
  ?creator foaf:name ?authorName .
  ?work fabio:hasManifestation <$originUri> .
@@ -14,8 +14,7 @@ select distinct ?book ?authorName ?title where {
  MINUS {?work fabio:hasManifestation ?book .}
  MINUS {?book dct:creator ?creator .}
  ?book dct:format <http://data.deichman.no/format/Book> ;
-  dct:title ?title ;
-  dct:language ?lang .
+  dct:title ?title .
  OPTIONAL { ?book foaf:depiction ?image .}
 }
 
@@ -35,7 +34,6 @@ SELECT DISTINCT ?book ?authorName ?title where {
  ?book dct:format <http://data.deichman.no/format/Book> ;
   dct:creator ?creator ;
   dct:title ?title .
- OPTIONAL { <$originUri foaf:depiction ?image . }
+ OPTIONAL {?book foaf:depiction ?image . }
  MINUS {?work fabio:hasManifestation ?book .}
- ?creator foaf:name
 }
